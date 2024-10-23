@@ -30,3 +30,4 @@ def get_cart_items():
 
     return jsonify(result[1]), result[0]
 
+app.run(debug=True, host='0.0.0.0', port=5002)
