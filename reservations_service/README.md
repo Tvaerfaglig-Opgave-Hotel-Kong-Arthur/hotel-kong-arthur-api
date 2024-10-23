@@ -1,76 +1,70 @@
-# Drinks Service: NOT UPDATED
-Håndterer brugernes indkøbskurve.
-Tilbyder funktioner til at tilføje, fjerne og opdatere varer i kurven.
-
-## Installation
-
-1. Clone dette repository:
-
-```
-   git clone https://github.com/DetGrey/cart_service
-   cd cart_service
-   docker build -t cart_service .
-   docker run -it --rm -p 5000:5000 -v ${PWD}:/home/data cart_service
-```
+# Reservations Service:
+Håndterer hotellets reservationer af værelser.
+Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
 
 ## API Endpoints
 
-### See all cart items
+### See all reservations
 
-- **URL:** `/cart`
+- **URL:** `/reservations`
 - **Method:** `GET`
 
 - **Response:**
 
-  - **200 OK:** Returns cart data
-  - **204 No contet:** Cart is empty
-  - **500:** Some error happened
+  - **200 OK:** Returns reservations data
+  - **204 No content:** reservations is empty
+  - **500: Error** Some error occured
 
-### Add new item to cart
+### Add new reservation
 
-- **URL:** `/cart`
+- **URL:** `/reservations`
 - **Method:** `POST`
 - **Request Body:** JSON
 
   ```json
   {
-      "product_id": 4321,
-      "amount": 1
+    "first_name": "Alice",
+    "family_name": "Johnson",
+    "country": "United States",
+    "room_type_id": 5,
+    "days_rented": 3,
+    "season": "high",
+    "price": 7543
   }
   ```
 
 - **Response:**
 
-  - **201 Created:** Item added to cart successfully
-  - **500:** Some error happened
+  - **201 Created:** Reservation created successfully
+  - **500: Error** Some error occured
 
-### Delete item from cart
+### Delete reservation
 
-- **URL:** `/cart/<id>`
+- **URL:** `/reservations/<id>`
 - **Method:** `DELETE`
 
 - **Response:**
 
-  - **204 No content:** Item deleted from cart successfully
+  - **204 No content:** Item deleted from reservations successfully
   - **404 Not Found:** Item not found
-  - **500:** Some error happened
+  - **500: Error** Some error occured
 
-### Update product amount
+### Update reservation
 
-- **URL:** `/cart/<id>`
+- **URL:** `/reservations/<id>`
 - **Method:** `PATCH`
 - **Request Body:** JSON
 
   ```json
   {
-      "amount": 2
+    "price": 5743,
+    "season": "mid"
   }
   ```
 
 - **Response:**
 
-  - **200 OK:** Product amount updated successfully
-  - **400:** Specifying amount is required
-  - **500:** Some error happened
+  - **200 OK:** Reservation updated successfully
+  - **404: Not found** No reservation found
+  - **500: Error** Some error occured
 
-   
