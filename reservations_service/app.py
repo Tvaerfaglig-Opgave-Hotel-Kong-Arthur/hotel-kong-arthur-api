@@ -30,6 +30,13 @@ def get_all_reservations():
 
     return jsonify(result[1]), result[0]
 
+# Get reservation by id
+@app.route('/reservations/<int:id>', methods=['GET'])
+def get_reservation_by_id(id):
+    result = find_item_by_id(id)
+
+    return jsonify(result[1]), result[0]
+
 # Add a reservation
 @app.route('/reservations', methods=['POST'])
 def add_to_reservations():

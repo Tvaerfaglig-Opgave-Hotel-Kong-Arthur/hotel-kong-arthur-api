@@ -1,4 +1,4 @@
-# Reservations Service:
+# Reservations Service: NOT UPDATED
 Håndterer hotellets reservationer af værelser.
 Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
 
