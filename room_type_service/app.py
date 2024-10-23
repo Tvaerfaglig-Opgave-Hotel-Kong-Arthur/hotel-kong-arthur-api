@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from cart import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_amount
+from room_type_service.db import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_amount
 
 app = Flask(__name__)
 
