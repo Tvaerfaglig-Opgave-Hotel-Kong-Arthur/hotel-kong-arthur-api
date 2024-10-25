@@ -73,9 +73,7 @@ def get_room_type_by_id(id): # TODO
 
 def _data_to_reservation_dict(data):
     return {
-        "first_name": data["first_name"] if data["first_name"] else None,
-        "family_name": data["family_name"] if data["family_name"] else None,
-        "country": data["country"] if data["country"] else None,
+        "guest_id": int(data["guest_id"]) if data["guest_id"] else None,
         "room_type_id": int(data["room_type_id"]) if data["room_type_id"] else None,
         "days_rented": int(data["days_rented"]) if data["days_rented"] else None,
         "season": data["season"] if data["season"] else None,

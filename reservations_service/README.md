@@ -34,9 +34,7 @@ Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
 
   ```json
   {
-    "first_name": "Alice",
-    "family_name": "Johnson",
-    "country": "United States",
+    "guest_id": 1,
     "room_type_id": 5,
     "days_rented": 3,
     "season": "high",

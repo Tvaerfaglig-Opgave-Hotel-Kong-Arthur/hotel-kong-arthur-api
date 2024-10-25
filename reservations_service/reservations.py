@@ -8,13 +8,10 @@ def create_table():
     with sqlite3.connect(DB_NAME) as conn:
         cur = conn.cursor()
 
-        # ----------------------------- QUERY SHOULD BE UPDATED
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS reservations (
+        create_table_query = f"""
+        CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            first_name TEXT,
-            family_name TEXT,
-            country TEXT,
+            guest_id INTEGER,
             room_type_id INTEGER,
             days_rented INTEGER,
             season TEXT,
@@ -25,23 +22,54 @@ def create_table():
         # Execute the create table statement
         cur.execute(create_table_query)
 
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS guests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            first_name TEXT,
+            family_name TEXT,
+            country TEXT,
+            UNIQUE(first_name, family_name, country)
+        )
+        """
+        cur.execute(create_table_query)
+
 def add_csv_to_db(filepath):
     with open(filepath, mode ='r')as file:
         csvFile = csv.reader(file)
         next(csvFile) # Spring headeren over
         for line in csvFile:
                 #print(line)
-                data = {
+                # Used to make sure that we only have unique guests and not 1000 guests that might be the same
+                guest = {
                     "first_name": line[0] if line[0] else None,
                     "family_name": line[1] if line[1] else None,
                     "country": line[2] if line[2] else None,
-                    "room_type_id": _find_room_type_id(line[3]) if line[3] else None,
-                    "days_rented": int(line[4]) if line[4] else None,
-                    "season": line[5] if line[5] else None,
-                    "price": int(line[6]) if line[6] else None
                 }
-                add_new_item(data)
-    return
+                _add_new_item_to_guests(guest)
+    
+    with open(filepath, mode ='r')as file:
+        csvFile = csv.reader(file)
+        next(csvFile) # Spring headeren over
+        for line in csvFile:
+                #print(line)
+                guest = {
+                    "first_name": line[0] if line[0] else None,
+                    "family_name": line[1] if line[1] else None,
+                    "country": line[2] if line[2] else None,
+                }
+
+                guestExists = _find_guest(guest)
+
+                if guestExists[0] == 200:
+                    data = {
+                        "guest_id": guestExists[1] if guestExists[1] else None,
+                        "room_type_id": _find_room_type_id(line[3]) if line[3] else None,
+                        "days_rented": int(line[4]) if line[4] else None,
+                        "season": line[5] if line[5] else None,
+                        "price": int(line[6]) if line[6] else None
+                    }
+                    add_new_item(data)                
+
 
 def add_new_item(data):
     try:
@@ -52,17 +80,39 @@ def add_new_item(data):
             cur.execute(
                 f'''
                 INSERT OR IGNORE INTO {TABLE_NAME} 
-                (first_name, family_name, country, room_type_id, days_rented, season, price) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                (guest_id, room_type_id, days_rented, season, price) 
+                VALUES (?, ?, ?, ?, ?)
                 ''',
                 (
-                    data.get('first_name'),
-                    data.get('family_name'),
-                    data.get('country'),
+                    data.get('guest_id'),
                     data.get('room_type_id'),
                     data.get('days_rented'),
                     data.get('season'),
                     data.get('price')
+                )
+            )
+
+            return [201, {"message": "New item added to database successfully."}]
+
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
+    
+def _add_new_item_to_guests(data):
+    try:
+        # Connect to db/file - both read or create if not exists
+        with sqlite3.connect(DB_NAME) as conn:
+            cur = conn.cursor()
+            
+            cur.execute(
+                f'''
+                INSERT OR IGNORE INTO guests 
+                (first_name, family_name, country) 
+                VALUES (?, ?, ?)
+                ''',
+                (
+                    data.get('first_name'),
+                    data.get('family_name'),
+                    data.get('country')
                 )
             )
 
@@ -191,6 +241,25 @@ def _find_room_type_id(room_name):
         "LOFT Suite": 8
     }
     return room_types.get(room_name)
+
+def _find_guest(data):
+    with sqlite3.connect(DB_NAME) as conn:
+            # Set the row factory to sqlite3.Row - By setting conn.row_factory = sqlite3.Row, you tell SQLite to return rows as sqlite3.Row objects, which can be accessed like dictionaries.
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            cur.execute(f'SELECT * FROM guests WHERE first_name = ? AND family_name = ? AND country = ?',
+                        (
+                            data.get('first_name'),
+                            data.get('family_name'),
+                            data.get('country')
+                        ))
+            data = cur.fetchall()
+        
+            if data:
+                return [200, [dict(row) for row in data][0].get('id')]
+            else:
+                return [404, {"message": "Item not found"}]
 
 #create_table()
 #add_csv_to_db('international_names_with_rooms_1000.csv')

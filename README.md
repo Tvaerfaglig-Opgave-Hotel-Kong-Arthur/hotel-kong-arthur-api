@@ -57,6 +57,13 @@ docker build -t room_type_service .
 docker run -it --name room_type_service --network hotel_kong_arthur_network --rm -p 5004:5004 room_type_service
 ```
 
+Guests microservice:
+```bash
+cd guests_service
+docker build -t guests_service .
+docker run -it --name guests_service --network hotel_kong_arthur_network --rm -p 5005:5005 guests_service
+```
+
 ## Ports:
 - 5000: Admin gateway
 
@@ -67,3 +74,5 @@ docker run -it --name room_type_service --network hotel_kong_arthur_network --rm
 - 5003: Reservations microservice
 
 - 5004: Room type microservice
+
+- 5005: Guests microservice
