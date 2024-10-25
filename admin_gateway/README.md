@@ -1,10 +1,11 @@
-# Reservations Service:
-Håndterer hotellets reservationer af værelser.
-Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
+# Admin Gateway: NOT UPDATED
+Gateway, som giver adgang til alle endpoints.
 
 ## API Endpoints
 
-### See all reservations
+### Reservation service endpoints
+
+#### See all reservations
 
 - **URL:** `/reservations`
 - **Method:** `GET`
@@ -15,7 +16,7 @@ Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
   - **204 No content:** reservations is empty
   - **500: Error** Some error occured
 
-### See reservation by id
+#### See reservation by id
 
 - **URL:** `/reservations/<id>`
 - **Method:** `GET`
@@ -26,7 +27,7 @@ Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
   - **204 No content:** reservation not found
   - **500: Error** Some error occured
 
-### Add new reservation
+#### Add new reservation
 
 - **URL:** `/reservations`
 - **Method:** `POST`
@@ -49,7 +50,7 @@ Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
   - **201 Created:** Reservation created successfully
   - **500: Error** Some error occured
 
-### Delete reservation
+#### Delete reservation
 
 - **URL:** `/reservations/<id>`
 - **Method:** `DELETE`
@@ -60,7 +61,7 @@ Tilbyder funktioner til at se, tilføje, fjerne og opdatere reservationer.
   - **404 Not Found:** Item not found
   - **500: Error** Some error occured
 
-### Update reservation
+#### Update reservation
 
 - **URL:** `/reservations/<id>`
 - **Method:** `PATCH`
