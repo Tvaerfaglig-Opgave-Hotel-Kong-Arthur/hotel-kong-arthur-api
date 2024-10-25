@@ -3,14 +3,16 @@
     For admin information from following microservices: reservations, drinks, room_type
 '''
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import requests
+import csv
+import io
 
 app = Flask(__name__)
 
 BASE_DRINKS_URL = f'http://drinks_service:5002/drinks'
 BASE_RESERVATIONS_URL = f'http://reservations_service:5003/reservations'
-BASE_ROOM_TYPE_URL = f'http://room_type_service:5004/types' # TODO
+BASE_ROOM_TYPE_URL = f'http://room_type_service:5004/room_types'
 
 @app.route('/', methods=['GET'])
 def root():
@@ -23,6 +25,18 @@ def get_drinks_items():
     url = f'{BASE_DRINKS_URL}'
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
+
+@app.route('/drinks/csv', methods=['GET'])
+def get_drinks_items_csv():
+    url = f'{BASE_DRINKS_URL}'
+    req = requests.get(url)
+    
+    data = _data_to_csv(req.json())
+
+    if isinstance(data, str):
+        return Response(data, mimetype='text/csv', headers={"Content-Disposition": "attachment;filename=data.csv"})
+    else:
+        return jsonify(data[1]), data[0]
 
 # Add new drink
 @app.route('/drinks', methods=['POST'])
@@ -55,9 +69,21 @@ def get_reservations():
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
 
+@app.route('/reservations/csv', methods=['GET'])
+def get_reservations_csv():
+    url = f'{BASE_RESERVATIONS_URL}'
+    req = requests.get(url)
+
+    data = _data_to_csv(req.json())
+
+    if isinstance(data, str):
+        return Response(data, mimetype='text/csv', headers={"Content-Disposition": "attachment;filename=data.csv"})
+    else:
+        return jsonify(data[1]), data[0]
+
 # Get reservation by id
 @app.route('/reservations/<int:id>', methods=['GET'])
-def get_reservations(id):
+def get_reservations_by_id(id):
     url = f'{BASE_RESERVATIONS_URL}/{id}'
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
@@ -87,14 +113,26 @@ def update_reservation(id):
 
 # ------------------------------------------------------ ROOM TYPE SERVICE
 # Get room types
-@app.route('/types', methods=['GET'])
+@app.route('/room_types', methods=['GET'])
 def get_room_types():
     url = f'{BASE_ROOM_TYPE_URL}'
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
 
+@app.route('/room_types/csv', methods=['GET'])
+def get_room_types_csv():
+    url = f'{BASE_ROOM_TYPE_URL}'
+    req = requests.get(url)
+    
+    data = _data_to_csv(req.json())
+
+    if isinstance(data, str):
+        return Response(data, mimetype='text/csv', headers={"Content-Disposition": "attachment;filename=data.csv"})
+    else:
+        return jsonify(data[1]), data[0]
+
 # Add new room type
-@app.route('/types', methods=['POST'])
+@app.route('/room_types', methods=['POST'])
 def add_to_room_types():
     data = request.json
     url = f'{BASE_ROOM_TYPE_URL}'
@@ -102,19 +140,43 @@ def add_to_room_types():
     return jsonify(req.json()), req.status_code
 
 # Remove room type
-@app.route('/types/<int:id>', methods=['DELETE'])
+@app.route('/room_types/<int:id>', methods=['DELETE'])
 def delete_item_from_room_types(id):
     url = f'{BASE_ROOM_TYPE_URL}/{id}'
     req = requests.post(url)
     return jsonify(req.json()), req.status_code
 
 # Update room type
-@app.route('/types/<int:id>', methods=['PATCH'])
+@app.route('/room_types/<int:id>', methods=['PATCH'])
 def update_room_type(id):
     data = request.json
     url = f'{BASE_ROOM_TYPE_URL}/{id}'
     req = requests.patch(url, json=data)
     return jsonify(req.json()), req.status_code
+
+# ------------------------------------------------------ Data to CSV function
+def _data_to_csv(data):
+
+    if not isinstance(data, list):
+        return [500, {"error": 'Data is not a list'}]
+    
+    try:
+        # Create a string buffer to hold the CSV data
+        output = io.StringIO()
+
+        writer = csv.DictWriter(output, fieldnames=data[0].keys())
+        writer.writeheader()
+        for dictionary in data:
+            writer.writerow(dictionary)
+        
+        # Move to the beginning of the StringIO buffer
+        output.seek(0)
+
+        # Return all the data written to the buffer as a string
+        return output.getvalue()
+
+    except Exception as e:
+        return [500, {"error": str(e)}]
 
 
 app.run(debug=True, host='0.0.0.0', port=5000)
