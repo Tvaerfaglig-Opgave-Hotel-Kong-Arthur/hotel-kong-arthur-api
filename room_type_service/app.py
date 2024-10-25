@@ -1,33 +1,21 @@
 """
-    Drinks Service:
-    User story 1-4
+    Room_type Service:
+    User story ****
 """
 
 from flask import Flask, jsonify, request
-from room_type_service.db import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_amount
+from room_type import select_all_items, find_item_by_id, delete_item_by_id, add_new_item, update_item 
 
 app = Flask(__name__)
 
 # ---------- EXAMPLE
-# Get cart items
-@app.route('/cart', methods=['GET'])
-def get_cart_items():
+# Get alle info
+@app.route('/room_type', methods=['GET'])
+def get_all_room_types():
     result = select_all_items()
-
-    if result[0] == 200:
-        cart_items = []
-        for item in result[1]:
-            product = get_product_by_id(item["product_id"])
-            if product:
-                cart_items.append({
-                    "id": item["id"],
-                    "product": product[0],
-                    "amount": item["amount"]
-                })
-
-        result[1] = cart_items
-
 
     return jsonify(result[1]), result[0]
 
-app.run(debug=True, host='0.0.0.0', port=5004)
+# Run the Flask app on port 5004 and allow external access
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5004)
