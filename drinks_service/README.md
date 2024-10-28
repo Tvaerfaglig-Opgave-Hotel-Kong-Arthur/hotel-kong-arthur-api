@@ -23,7 +23,7 @@ Tilbyder funktioner til at tilføje, fjerne og opdatere varer i kurven.
 - **Response:**
 
   - **200 OK:** Returns cart data
-  - **204 No contet:** Cart is empty
+  - **204 No content:** Cart is empty
   - **500:** Some error happened
 
 ### Add new item to cart

@@ -12,7 +12,7 @@ Tilbyder funktioner til at tilføje, fjerne og opdatere værelsestyper.
 - **Response:**
 
   - **200 OK:** Returns room_type data
-  - **204 No contet:** No items in room_type
+  - **204 No content:** No items in room_type
   - **500:** Some error happened
 
 ### Find room by id
