@@ -9,7 +9,7 @@ import requests
 app = Flask(__name__)
 
 BASE_DRINKS_URL = f'http://drinks_service:5002/drinks'
-BASE_ROOM_TYPE_URL = f'http://room_type_service:5004/types' # TODO
+BASE_ROOM_TYPE_URL = f'http://room_type_service:5004/room_types'
 
 @app.route('/', methods=['GET'])
 def root():
@@ -26,7 +26,7 @@ def get_drinks_items():
 
 # ------------------------------------------------------ ROOM TYPE SERVICE
 # Get room types
-@app.route('/types', methods=['GET'])
+@app.route('/room_types', methods=['GET'])
 def get_room_types():
     url = f'{BASE_ROOM_TYPE_URL}'
     req = requests.get(url)

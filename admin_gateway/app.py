@@ -89,6 +89,13 @@ def get_reservations_by_id(id):
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
 
+# Get reservation by guest id
+@app.route('/reservations/guest/<int:id>', methods=['GET'])
+def get_reservations_by_guest_id(id):
+    url = f'{BASE_RESERVATIONS_URL}/guest/{id}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
 # Add new reservation
 @app.route('/reservations', methods=['POST'])
 def add_to_reservations():

@@ -16,7 +16,7 @@ def get_all_room_types():
 
     return jsonify(result[1]), result[0]
 
-# FInd by id
+# Find by id
 @app.route('/room_types/<int:id>', methods=['GET'])
 def get_room_by_id(id):
     result = find_item_by_id(id)

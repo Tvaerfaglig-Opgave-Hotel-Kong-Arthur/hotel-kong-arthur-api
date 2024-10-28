@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from reservations import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_item
+from reservations import select_all_items, find_item_by_id, add_new_item, delete_item_by_id, update_item, find_item_by_guest_id
 import requests
 
 app = Flask(__name__)
@@ -34,6 +34,13 @@ def get_all_reservations():
 @app.route('/reservations/<int:id>', methods=['GET'])
 def get_reservation_by_id(id):
     result = find_item_by_id(id)
+
+    return jsonify(result[1]), result[0]
+
+# Get reservation by guest id
+@app.route('/reservations/guest/<int:id>', methods=['GET'])
+def get_reservation_by_guest_id(id):
+    result = find_item_by_guest_id(id)
 
     return jsonify(result[1]), result[0]
 

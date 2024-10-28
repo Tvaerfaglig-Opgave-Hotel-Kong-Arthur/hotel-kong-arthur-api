@@ -210,15 +210,15 @@ def find_item_by_id(id):
         
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
-
-def find_item_by_room_type_id(product_id):
+    
+def find_item_by_guest_id(id):
     try:
         with sqlite3.connect(DB_NAME) as conn:
             # Set the row factory to sqlite3.Row - By setting conn.row_factory = sqlite3.Row, you tell SQLite to return rows as sqlite3.Row objects, which can be accessed like dictionaries.
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
 
-            cur.execute(f'SELECT * FROM {TABLE_NAME} WHERE product_id = ?', (product_id,))
+            cur.execute(f'SELECT * FROM {TABLE_NAME} WHERE guest_id = ?', (id,))
             data = cur.fetchall()
         
             if data:
