@@ -94,6 +94,25 @@ def drinks_prices ():
         
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
+    
+def add_new_drink(drink_name : str, category : str, price : float, units_sold : int):
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            insert_query = f'''INSERT INTO {TABLE_NAME} (drink_name, category, price, units_sold) VALUES (?,?,?,?)'''
+            
+
+            cur.execute(insert_query, (drink_name, category, price, units_sold))
+            conn.commit()
+
+            return [201, {"message": "New drink added successfully."}]
+    
+    except sqlite3.IntegrityError:
+        return [409, {"error": "Drink already exists with these details."}]
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
 
 #create_table()
 #add_excel_to_db()
