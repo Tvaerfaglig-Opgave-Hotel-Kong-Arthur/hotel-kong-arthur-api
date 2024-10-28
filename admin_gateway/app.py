@@ -13,6 +13,7 @@ app = Flask(__name__)
 BASE_DRINKS_URL = f'http://drinks_service:5002/drinks'
 BASE_RESERVATIONS_URL = f'http://reservations_service:5003/reservations'
 BASE_ROOM_TYPE_URL = f'http://room_type_service:5004/room_types'
+BASE_GUESTS_URL = f'http://guests_service:5005/guests'
 
 @app.route('/', methods=['GET'])
 def root():
@@ -88,6 +89,13 @@ def get_reservations_by_id(id):
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
 
+# Get reservation by guest id
+@app.route('/reservations/guest/<int:id>', methods=['GET'])
+def get_reservations_by_guest_id(id):
+    url = f'{BASE_RESERVATIONS_URL}/guest/{id}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
 # Add new reservation
 @app.route('/reservations', methods=['POST'])
 def add_to_reservations():
@@ -151,6 +159,49 @@ def delete_item_from_room_types(id):
 def update_room_type(id):
     data = request.json
     url = f'{BASE_ROOM_TYPE_URL}/{id}'
+    req = requests.patch(url, json=data)
+    return jsonify(req.json()), req.status_code
+
+# ------------------------------------------------------ GUESTS SERVICE
+# Get guests
+@app.route('/guests', methods=['GET'])
+def get_room_types():
+    url = f'{BASE_GUESTS_URL}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
+@app.route('/guests/csv', methods=['GET'])
+def get_guests_csv():
+    url = f'{BASE_GUESTS_URL}'
+    req = requests.get(url)
+    
+    data = _data_to_csv(req.json())
+
+    if isinstance(data, str):
+        return Response(data, mimetype='text/csv', headers={"Content-Disposition": "attachment;filename=data.csv"})
+    else:
+        return jsonify(data[1]), data[0]
+
+# Add new guest
+@app.route('/guests', methods=['POST'])
+def add_to_guests():
+    data = request.json
+    url = f'{BASE_GUESTS_URL}'
+    req = requests.post(url, json=data)
+    return jsonify(req.json()), req.status_code
+
+# Remove guest
+@app.route('/guests/<int:id>', methods=['DELETE'])
+def delete_item_from_guests(id):
+    url = f'{BASE_GUESTS_URL}/{id}'
+    req = requests.post(url)
+    return jsonify(req.json()), req.status_code
+
+# Update guest
+@app.route('/guests/<int:id>', methods=['PATCH'])
+def update_guests(id):
+    data = request.json
+    url = f'{BASE_GUESTS_URL}/{id}'
     req = requests.patch(url, json=data)
     return jsonify(req.json()), req.status_code
 

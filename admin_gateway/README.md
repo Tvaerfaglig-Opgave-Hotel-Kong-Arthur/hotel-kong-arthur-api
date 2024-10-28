@@ -27,6 +27,17 @@ Gateway, som giver adgang til alle endpoints.
   - **204 No content:** reservation not found
   - **500: Error** Some error occured
 
+#### See reservation by guest id
+
+- **URL:** `/reservations/guest/<id>`
+- **Method:** `GET`
+
+- **Response:**
+
+  - **200 OK:** Returns reservation data
+  - **204 No content:** reservation not found
+  - **500: Error** Some error occured
+
 #### Add new reservation
 
 - **URL:** `/reservations`
