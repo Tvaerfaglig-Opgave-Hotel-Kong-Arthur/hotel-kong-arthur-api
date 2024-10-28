@@ -49,10 +49,10 @@ def select_all_drinks ():
             cur = conn.cursor()
 
             cur.execute(f'SELECT * FROM {TABLE_NAME}')
-            rows = cur.fetchall()
+            data = cur.fetchall()
 
             if data:
-                return [200, dict(row) for row in rows ]
+                return [200, [dict(row) for row in data] ]
             else:
                 return [204, {"message": f"No items in {TABLE_NAME}"}]
         
