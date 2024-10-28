@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from data import select_all_drinks, drinks_category
+from data import select_all_drinks, drinks_category, drinks_prices
 
 app = Flask(__name__)
 
@@ -23,6 +23,13 @@ def get_drinks_sorted_by_category(category):
 
     return jsonify(data), status
 
+# Get the drinks prices in a descending order, so you can see the highst price first
+@app.route('/drinks/prices', methods=['GET'])
+def get_drinks_prices():
+    status, data = drinks_prices()
+
+    return jsonify(data), status
+    
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5002)

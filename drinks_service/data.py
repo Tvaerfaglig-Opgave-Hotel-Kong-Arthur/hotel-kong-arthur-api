@@ -76,6 +76,24 @@ def drinks_category (category : str):
         
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
+    
+def drinks_prices ():
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            cur.execute(f'SELECT drink_name, price FROM {TABLE_NAME} ORDER BY price DESC')
+            data = cur.fetchall()
+
+            if data:
+                prices = [dict(row) for row in data]
+                return [200, prices]
+            else:
+                return [204, {"message": f"No items in {TABLE_NAME}"}]
+        
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
 
 #create_table()
 #add_excel_to_db()
