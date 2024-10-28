@@ -35,7 +35,7 @@ def add_excel_to_db ():
         engine = create_engine("sqlite:///drinks.db")
 
         # write the dataframe to the sqlite table
-        df.to_sql ("drinks", con=engine, if_exists="replace", index=False)
+        df.to_sql ("drinks", con=engine, if_exists="append", index=False)
 
         print("Data imported succesfully into 'drinks' table")
 
@@ -53,6 +53,24 @@ def select_all_drinks ():
 
             if data:
                 return [200, [dict(row) for row in data] ]
+            else:
+                return [204, {"message": f"No items in {TABLE_NAME}"}]
+        
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
+
+def drinks_category (category : str):
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            cur.execute(f'SELECT drink_name, category FROM {TABLE_NAME} WHERE category = "{category}"')
+            data = cur.fetchall()
+
+            if data:
+                drinks = [dict(row) for row in data]
+                return [200, drinks]
             else:
                 return [204, {"message": f"No items in {TABLE_NAME}"}]
         
