@@ -1,76 +1,79 @@
-# Drinks Service: NOT UPDATED
-Håndterer brugernes indkøbskurve.
-Tilbyder funktioner til at tilføje, fjerne og opdatere varer i kurven.
-
-## Installation
-
-1. Clone dette repository:
-
-```
-   git clone https://github.com/DetGrey/cart_service
-   cd cart_service
-   docker build -t cart_service .
-   docker run -it --rm -p 5000:5000 -v ${PWD}:/home/data cart_service
-```
+# Room type service:
+Håndterer Værelsestyperne.
+Tilbyder funktioner til at tilføje, fjerne og opdatere værelsestyper.
 
 ## API Endpoints
 
-### See all cart items
+### See all room type items
 
-- **URL:** `/cart`
+- **URL:** `/room_types`
 - **Method:** `GET`
 
 - **Response:**
 
-  - **200 OK:** Returns cart data
-  - **204 No contet:** Cart is empty
+  - **200 OK:** Returns room_type data
+  - **204 No contet:** No items in room_type
   - **500:** Some error happened
 
-### Add new item to cart
+### Find room by id
 
-- **URL:** `/cart`
+- **URL:** `/room_types/<int:id>`
+- **Method:** `GET
+
+- **Response:**
+
+  - **200 OK:** Returns room_type data by id
+  - **404 Not found:** Item not found
+  - **500:** Some error happened
+
+
+### Add new room type
+
+- **URL:** `/room_types`
 - **Method:** `POST`
 - **Request Body:** JSON
 
   ```json
   {
-      "product_id": 4321,
-      "amount": 1
+      "type": "Standard Single",
+      "low": 950,
+      "mid": 1100,
+      "high": 1300
   }
   ```
 
 - **Response:**
 
-  - **201 Created:** Item added to cart successfully
+  - **201 Created:** Item added to room types successfully
   - **500:** Some error happened
 
-### Delete item from cart
+### Delete item from room type
 
-- **URL:** `/cart/<id>`
+- **URL:** `/room_types/<id>`
 - **Method:** `DELETE`
 
 - **Response:**
 
-  - **204 No content:** Item deleted from cart successfully
+  - **204 No content:** Item deleted from room type successfully
   - **404 Not Found:** Item not found
   - **500:** Some error happened
 
 ### Update product amount
 
-- **URL:** `/cart/<id>`
+- **URL:** `/room_types/<id>`
 - **Method:** `PATCH`
 - **Request Body:** JSON
 
   ```json
   {
-      "amount": 2
+      "low": 2000
   }
   ```
 
 - **Response:**
 
-  - **200 OK:** Product amount updated successfully
-  - **400:** Specifying amount is required
+  - **200 OK:** Room type updated successfully
+  - **400:** Room type not found
   - **500:** Some error happened
 
    
