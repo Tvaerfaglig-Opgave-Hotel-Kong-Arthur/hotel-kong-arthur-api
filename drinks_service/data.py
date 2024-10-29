@@ -113,6 +113,32 @@ def add_new_drink(drink_name : str, category : str, price : float, units_sold : 
         return [409, {"error": "Drink already exists with these details."}]
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
+    
+def update_drink_price (new_price : float, id : int):
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            print(f"Updating drink with ID {id} to new price {new_price}")
+
+            update_query = f'UPDATE {TABLE_NAME} SET price = ? WHERE id = ?'
+            
+            print(f"Executing query: {update_query}")
+            print(f"With values: new_price={new_price}, drink_id={id}")
+
+            cur.execute(update_query, (new_price, id))
+            conn.commit()
+
+            print(f"Rows affected: {cur.rowcount}")
+
+            if cur.rowcount == 0: 
+                return [404, {"message": "Drink not found"}]
+
+            return [200, {"message": "Price updated."}]
+    
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
 
 #create_table()
 #add_excel_to_db()

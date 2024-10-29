@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink
+from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drink_price
 
 app = Flask(__name__)
 
@@ -44,6 +44,19 @@ def add_new_drinks():
         return jsonify({"error": "All fields are required."}), 400
     
     status, response_data = add_new_drink(drink_name, category, price, units_sold)
+
+    return jsonify(response_data), status
+
+@app.route('/drinks/<int:id>', methods=['PATCH'])
+def update_drinks_prices (id):
+    data = request.get_json()
+
+    new_price = data.get("price")
+
+    if new_price == None:
+        return jsonify({"error": "Price is required"}), 400
+    
+    status, response_data = update_drink_price(new_price=new_price, id=id)
 
     return jsonify(response_data), status
 
