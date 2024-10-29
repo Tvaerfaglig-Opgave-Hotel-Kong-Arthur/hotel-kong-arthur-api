@@ -47,6 +47,7 @@ def add_new_drinks():
 
     return jsonify(response_data), status
 
+# Update drinks price via id 
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 def update_drinks_prices (id):
     data = request.get_json()
