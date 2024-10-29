@@ -114,7 +114,7 @@ def add_new_drink(drink_name : str, category : str, price : float, units_sold : 
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
     
-def update_drink_price (new_price : float, id : int):
+def update_drinks_price (new_price : float, id : int):
     try:
         with sqlite3.connect(DB_NAME) as conn: 
             conn.row_factory = sqlite3.Row
@@ -130,6 +130,26 @@ def update_drink_price (new_price : float, id : int):
                 return [404, {"message": "Drink not found"}]
 
             return [200, {"message": "Price updated."}]
+    
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
+
+def update_units_sold (new_units_sold_num : int, id : int):
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+
+            update_query = f'UPDATE {TABLE_NAME} SET units_sold = ? WHERE id = ?'
+
+            cur.execute(update_query, (new_units_sold_num, id))
+            conn.commit()
+
+
+            if cur.rowcount == 0: 
+                return [404, {"message": "Drink not found"}]
+
+            return [200, {"message": "Unit sold updated."}]
     
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
