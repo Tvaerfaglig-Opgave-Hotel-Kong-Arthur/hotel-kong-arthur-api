@@ -120,17 +120,11 @@ def update_drink_price (new_price : float, id : int):
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
 
-            print(f"Updating drink with ID {id} to new price {new_price}")
-
             update_query = f'UPDATE {TABLE_NAME} SET price = ? WHERE id = ?'
-            
-            print(f"Executing query: {update_query}")
-            print(f"With values: new_price={new_price}, drink_id={id}")
 
             cur.execute(update_query, (new_price, id))
             conn.commit()
 
-            print(f"Rows affected: {cur.rowcount}")
 
             if cur.rowcount == 0: 
                 return [404, {"message": "Drink not found"}]
