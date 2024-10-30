@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drink_price, update_units_sold
+from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drinks_price, update_units_sold
 
 app = Flask(__name__)
 
@@ -51,28 +51,31 @@ def add_new_drinks():
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 def update_drinks (id):
     data = request.get_json()
-
+    print("Received data:", data)
 
     new_price = data.get("price")
-
-    if new_price == None:
-        return jsonify({"error": "Price is required"}), 400
-    
-    status, response_data = update_drink_price(new_price=new_price, id=id)
-
-    return jsonify(response_data), status
-
-def update_drinks_units_sold(id):
-    data = request.get_json()
-
     new_units_sold_number = data.get("units_sold")
 
-    if new_units_sold_number == None:
-        return jsonify({"error": "Units sold is required"}), 400
+    if new_price is None and new_units_sold_number is None:
+        return jsonify({"error": "No valid fields provided"}), 400
     
-    status, response_data = update_units_sold(new_units_sold_num=new_units_sold_number, id=id)
+    responses = []
+    
+    if new_price is not None:
+        status, response_data = update_drinks_price(new_price=new_price, id=id)
+        if status != 200:
+            return jsonify(response_data), status
+        
+        responses.append(response_data)
 
-    return jsonify(response_data), status
+    if new_units_sold_number is not None:
+        status, response_data = update_units_sold(new_units_sold_num=new_units_sold_number, id=id)
+        if status != 200:
+            return jsonify(response_data), status
+        
+        responses.append(response_data)
+
+    return jsonify({"message": "Updates applied", "details": responses}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5002)
