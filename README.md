@@ -15,12 +15,14 @@ git clone https://github.com/Tvaerfaglig-Opgave-Hotel-Kong-Arthur/hotel-kong-art
 cd hotel-kong-arthur-api
 ```
 
-2. Create Docker network:
+2. Open Docker application
+
+3. Create Docker network:
 ```bash
 docker network create hotel_kong_arthur_network
 ```
 
-3. For each gateway/microservice, use a separate terminal:
+4. For each gateway/microservice, use a separate terminal:
 
 Admin Gateway:
 ```bash

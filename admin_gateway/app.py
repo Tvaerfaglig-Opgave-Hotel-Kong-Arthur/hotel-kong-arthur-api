@@ -51,7 +51,7 @@ def add_to_drinks():
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 def delete_item_from_drinks(id):
     url = f'{BASE_DRINKS_URL}/{id}'
-    req = requests.post(url)
+    req = requests.delete(url)
     return jsonify(req.json()), req.status_code
 
 # Update drink
@@ -108,7 +108,7 @@ def add_to_reservations():
 @app.route('/reservations/<int:id>', methods=['DELETE'])
 def delete_reservation(id):
     url = f'{BASE_RESERVATIONS_URL}/{id}'
-    req = requests.post(url)
+    req = requests.delete(url)
     return jsonify(req.json()), req.status_code
 
 # Update reservation
@@ -139,6 +139,13 @@ def get_room_types_csv():
     else:
         return jsonify(data[1]), data[0]
 
+# Find room type by id
+@app.route('/room_types/<int:id>', methods=['GET'])
+def get_room_type_by_id(id):
+    url = f'{BASE_ROOM_TYPE_URL}/{id}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
 # Add new room type
 @app.route('/room_types', methods=['POST'])
 def add_to_room_types():
@@ -151,7 +158,7 @@ def add_to_room_types():
 @app.route('/room_types/<int:id>', methods=['DELETE'])
 def delete_item_from_room_types(id):
     url = f'{BASE_ROOM_TYPE_URL}/{id}'
-    req = requests.post(url)
+    req = requests.delete(url)
     return jsonify(req.json()), req.status_code
 
 # Update room type
@@ -165,7 +172,7 @@ def update_room_type(id):
 # ------------------------------------------------------ GUESTS SERVICE
 # Get guests
 @app.route('/guests', methods=['GET'])
-def get_room_types():
+def get_all_guests():
     url = f'{BASE_GUESTS_URL}'
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
@@ -182,6 +189,13 @@ def get_guests_csv():
     else:
         return jsonify(data[1]), data[0]
 
+# Find guest by id
+@app.route('/guests/<int:id>', methods=['GET'])
+def get_guest_by_id(id):
+    url = f'{BASE_GUESTS_URL}/{id}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
 # Add new guest
 @app.route('/guests', methods=['POST'])
 def add_to_guests():
@@ -194,7 +208,7 @@ def add_to_guests():
 @app.route('/guests/<int:id>', methods=['DELETE'])
 def delete_item_from_guests(id):
     url = f'{BASE_GUESTS_URL}/{id}'
-    req = requests.post(url)
+    req = requests.delete(url)
     return jsonify(req.json()), req.status_code
 
 # Update guest
