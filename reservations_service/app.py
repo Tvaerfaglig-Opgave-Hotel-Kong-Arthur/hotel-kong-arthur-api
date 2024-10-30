@@ -115,6 +115,7 @@ def _add_guest_room_type_data(item):
         if room_type and guest:
             return {
                 "days_rented": item["days_rented"],
+                "guest_id": item["guest_id"],
                 "first_name": guest["first_name"],
                 "family_name": guest["family_name"],
                 "id": item["id"],
@@ -134,6 +135,7 @@ def _add_guest_room_type_data(item):
         elif guest:
             return {
                 "days_rented": item["days_rented"],
+                "guest_id": item["guest_id"],
                 "first_name": guest["first_name"],
                 "family_name": guest["family_name"],
                 "id": item["id"],
