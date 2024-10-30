@@ -27,6 +27,20 @@ def get_drinks_items():
     req = requests.get(url)
     return jsonify(req.json()), req.status_code
 
+# Get drinks order by category
+@app.route('/drinks/<category>', methods=['GET'])
+def get_drinks_order_by_category():
+    url = f'{BASE_DRINKS_URL}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
+# Get drinks prices in a descending order
+@app.route('/drinks/prices', methods=['GET'])
+def get_drinks_prices_ordered():
+    url = f'{BASE_DRINKS_URL}'
+    req = requests.get(url)
+    return jsonify(req.json()), req.status_code
+
 @app.route('/drinks/csv', methods=['GET'])
 def get_drinks_items_csv():
     url = f'{BASE_DRINKS_URL}'
