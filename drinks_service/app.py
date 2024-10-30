@@ -4,7 +4,7 @@
 """
 
 from flask import Flask, jsonify, request
-from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drinks_price, update_units_sold
+from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drinks_price, update_units_sold, delete_drinks
 
 app = Flask(__name__)
 
@@ -76,6 +76,13 @@ def update_drinks (id):
         responses.append(response_data)
 
     return jsonify({"message": "Updates applied", "details": responses}), 200
+
+# Delete drink via id
+@app.route('/drinks/<int:id>', methods=['DELETE'])
+def delete_drink (id):
+    status, response_data = delete_drinks(id=id)
+    return jsonify(response_data), status
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5002)

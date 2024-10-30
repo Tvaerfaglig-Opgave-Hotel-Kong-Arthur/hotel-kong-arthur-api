@@ -153,6 +153,26 @@ def update_units_sold (new_units_sold_num : int, id : int):
     
     except sqlite3.Error as e:
         return [500, {"error": str(e)}]
+    
+def delete_drinks (id : int):
+    try:
+        with sqlite3.connect(DB_NAME) as conn: 
+            cur = conn.cursor()
+
+            delete_query = f'DELETE FROM {TABLE_NAME} WHERE id = ?'
+            cur.execute(delete_query, (id,))
+            
+            if cur.rowcount == 0: 
+                return [404, {"message": "Drink not found"}]
+            
+            cur.execute(f"UPDATE sqlite_sequence SET seq = (SELECT MAX(id) FROM {TABLE_NAME} WHERE name = '{TABLE_NAME}')")
+            conn.commit()
+
+
+            return [200, {"message": "Drinks deleted successfully and ID sequence reset"}]
+    
+    except sqlite3.Error as e:
+        return [500, {"error": str(e)}]
 
 #create_table()
 #add_excel_to_db()
