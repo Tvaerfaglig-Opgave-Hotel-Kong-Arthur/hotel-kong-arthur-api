@@ -1,4 +1,6 @@
 # Admin Gateway: NOT UPDATED
+- Add csv endpoints
+- drinks and guest endpoints
 Gateway, som giver adgang til alle endpoints.
 
 ## API Endpoints
@@ -107,7 +109,7 @@ Gateway, som giver adgang til alle endpoints.
 ### Find room by id
 
 - **URL:** `/room_types/<int:id>`
-- **Method:** `GET
+- **Method:** `GET`
 
 - **Response:**
 
