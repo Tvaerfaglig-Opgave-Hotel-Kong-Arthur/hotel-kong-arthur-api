@@ -17,12 +17,12 @@ cd hotel-kong-arthur-api
 
 2. Open Docker application
 
-3. Create Docker network:
+3. Create Docker network in VS Code terminal:
 ```bash
 docker network create hotel_kong_arthur_network
 ```
 
-4. For each gateway/microservice, use a separate terminal:
+4. For each gateway/microservice, use a separate terminal in VS Code:
 
 Admin Gateway:
 ```bash
