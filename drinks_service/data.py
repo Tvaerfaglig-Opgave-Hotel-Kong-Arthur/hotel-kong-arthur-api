@@ -65,9 +65,9 @@ def drinks_category (category : str):
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
 
-            cur.execute(f'SELECT drink_name, category FROM {TABLE_NAME} WHERE category = "{category}"')
+            cur.execute(f'SELECT * FROM {TABLE_NAME} WHERE category = "{category}" COLLATE NOCASE')
             data = cur.fetchall()
-
+            
             if data:
                 drinks = [dict(row) for row in data]
                 return [200, drinks]

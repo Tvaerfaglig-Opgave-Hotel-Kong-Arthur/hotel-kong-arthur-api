@@ -2,17 +2,6 @@
 Håndterer brugerens drinks kort.
 Tilbyder funktioner til at tilføje, fjerne og opdatere drinks databasen.
 
-## Installation
-
-1. Clone dette repository:
-
-```
-   git clone https://github.com/Tvaerfaglig-Opgave-Hotel-Kong-Arthur/hotel-kong-arthur-api.git
-   cd drinks_service
-   docker build -t drinks_service .
-   docker run -it --rm -p 5000:5000 -v ${PWD}:/home/data drinks_service
-```
-
 ## API Endpoints
 
 ### See all drinks
