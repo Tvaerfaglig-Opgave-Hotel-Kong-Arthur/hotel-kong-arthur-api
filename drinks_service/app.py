@@ -5,11 +5,16 @@
 
 from flask import Flask, jsonify, request
 from data import select_all_drinks, drinks_category, drinks_prices, add_new_drink, update_drinks_price, update_units_sold, delete_drinks
+from flasgger import swag_from
+from swagger.config import init_swagger
 
 app = Flask(__name__)
 
+init_swagger(app)
+
 # Get drinks items
 @app.route('/drinks', methods=['GET'])
+@swag_from('swagger/drinks.yaml')
 def get_drinks():
     
     result = select_all_drinks()
